@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geotopia - Lost Treasure</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: url('https://daryeaye.github.io/geotopia/1-1.png') no-repeat center center fixed;
+            background-size: cover;
+            position: relative;
+        }
+        .container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+        }
+        .box {
+            position: absolute;
+            width: 140px;
+            height: 100px;
+            border: 3px solid transparent;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.3s;
+        }
+        .box:hover {
+            transform: scale(1.1);
+            box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5);
+        }
+        /* Box Positions */
+        .officer {
+            left: 11.5%;
+            bottom: 8%;
+            border-color: red;
+        }
+        .professor {
+            left: 27%;
+            bottom: 8%;
+            border-color: purple;
+        }
+        .hacker {
+            left: 42.5%;
+            bottom: 8%;
+            border-color: blue;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Officer Access Box -->
+        <div class="box officer" onclick="window.open('https://daryeaye.github.io/geotopia/GT1%20Officer+.pdf', '_blank')"></div>
+
+        <!-- Professor Access Box -->
+        <div class="box professor" onclick="window.open('https://daryeaye.github.io/geotopia/GT1%20Professor+.pdf', '_blank')"></div>
+
+        <!-- Hacker Access Box -->
+        <div class="box hacker" onclick="window.open('https://daryeaye.github.io/geotopia/GT1%20Hacker+.pdf', '_blank')"></div>
+    </div>
+
+</body>
+</html>
