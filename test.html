@@ -6,21 +6,32 @@
     <title>Geotopia - Lost Treasure</title>
     <style>
         body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
             margin: 0;
-            padding: 0;
-            background: url('https://daryeaye.github.io/geotopia/1-1.png') no-repeat center center fixed;
-            background-size: cover;
-            position: relative;
+            background-color: #000; /* Fallback background */
         }
         .container {
             position: relative;
-            width: 100vw;
-            height: 100vh;
+            width: 1100px;  /* Fixed width */
+            height: 620px;  /* Fixed height */
+            background: url('https://daryeaye.github.io/geotopia/1-1.png') no-repeat center center;
+            background-size: contain;
+        }
+        .overlay {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background: transparent; /* Fully transparent */
         }
         .box {
             position: absolute;
-            width: 140px;
-            height: 100px;
+            width: 160px; /* Adjusted for better coverage */
+            height: 120px;
             border: 3px solid transparent;
             cursor: pointer;
             transition: transform 0.2s, box-shadow 0.3s;
@@ -29,20 +40,20 @@
             transform: scale(1.1);
             box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5);
         }
-        /* Box Positions */
+        /* Perfectly Calibrated Positions */
         .officer {
-            left: 11.5%;
-            bottom: 8%;
+            left: 108px;   /* Fine-tuned left offset */
+            bottom: 85px;  /* Fine-tuned bottom offset */
             border-color: red;
         }
         .professor {
-            left: 27%;
-            bottom: 8%;
+            left: 288px;   /* Fine-tuned left offset */
+            bottom: 85px;  /* Fine-tuned bottom offset */
             border-color: purple;
         }
         .hacker {
-            left: 42.5%;
-            bottom: 8%;
+            left: 468px;   /* Fine-tuned left offset */
+            bottom: 85px;  /* Fine-tuned bottom offset */
             border-color: blue;
         }
     </style>
@@ -50,14 +61,17 @@
 <body>
 
     <div class="container">
-        <!-- Officer Access Box -->
-        <div class="box officer" onclick="window.open('https://daryeaye.github.io/geotopia/GT1%20Officer+.pdf', '_blank')"></div>
+        <!-- Transparent Overlay -->
+        <div class="overlay">
+            <!-- Officer Access Box -->
+            <div class="box officer" onclick="window.open('https://daryeaye.github.io/geotopia/GT1%20Officer+.pdf', '_blank')"></div>
 
-        <!-- Professor Access Box -->
-        <div class="box professor" onclick="window.open('https://daryeaye.github.io/geotopia/GT1%20Professor+.pdf', '_blank')"></div>
+            <!-- Professor Access Box -->
+            <div class="box professor" onclick="window.open('https://daryeaye.github.io/geotopia/GT1%20Professor+.pdf', '_blank')"></div>
 
-        <!-- Hacker Access Box -->
-        <div class="box hacker" onclick="window.open('https://daryeaye.github.io/geotopia/GT1%20Hacker+.pdf', '_blank')"></div>
+            <!-- Hacker Access Box -->
+            <div class="box hacker" onclick="window.open('https://daryeaye.github.io/geotopia/GT1%20Hacker+.pdf', '_blank')"></div>
+        </div>
     </div>
 
 </body>
