@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Geotopia Pt7 Final</title>
+  <style>
+    /* Center the app container on the screen */
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    #app-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    /* The container remains 960px x 540px */
+    #container {
+      position: relative;
+      width: 960px;
+      height: 540px;
+      border: 1px solid #ccc;
+      background: white;
+      overflow: hidden;
+    }
+    /* Pages are absolutely positioned inside the container */
+    .page {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 960px;
+      height: 540px;
+      display: none;
+      background-size: cover;
+      background-position: center;
+    }
+    .page.active {
+      display: block;
+    }
+    /* Typeable boxes (inputs) styling */
+    input[type="text"] {
+      font-family: "Comic Sans MS", sans-serif;
+      font-size: 18px;
+      padding: 5px;
+      box-sizing: border-box;
+    }
+    /* Navigation buttons styling */
+    #nav-buttons {
+      margin-top: 10px;
+    }
+    button {
+      font-family: "Comic Sans MS", sans-serif;
+      font-size: 20px;
+      background-color: lightblue;
+      border: none;
+      padding: 10px 20px;
+      margin: 0 5px;
+      cursor: pointer;
+    }
+    /* Local back button styling for pages 7-12 (now lower right corner) */
+    .local-back {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      font-family: "Comic Sans MS", sans-serif;
+      font-size: 20px;
+      background-color: lightblue;
+      border: none;
+      padding: 5px 10px;
+      cursor: pointer;
+      z-index: 2;
+    }
+    /* Side widget styling */
+    #side-widget {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      width: 200px;
+      height: 200px;
+      background: #f9f9f9;
+      border: 1px solid #ccc;
+      padding: 10px;
+      box-sizing: border-box;
+      font-family: 'Caveat', cursive;
+      z-index: 999;
+    }
+    #side-widget p.title {
+      font-size: 24px;
+      text-align: center;
+      margin: 0 0 10px;
+    }
+    #side-widget button,
+    #side-widget a {
+      display: block;
+      margin: 0 auto;
+      font-size: 20px;
+      cursor: pointer;
+      text-align: center;
+      background: lightblue;
+      border: none;
+      padding: 10px;
+      text-decoration: none;
+      color: inherit;
+    }
+    /* Selection overlay styles */
+    #selection-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      cursor: crosshair;
+      z-index: 1000;
+    }
+    #selection-box {
+      position: absolute;
+      border: 2px dashed red;
+      background: rgba(0,0,0,0.1);
+    }
+    /* Invisible clickable boxes on Page 6 */
+    .box {
+      position: absolute;
+      cursor: pointer;
+      background: transparent;
+      border: none;
+    }
+  </style>
+  
+  <!-- Additional Side Widget Resources -->
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+  <div id="app-container">
+    <div id="container">
+      <!-- Page 1 -->
+      <div id="page1" class="page active" style="background: url('https://daryeaye.github.io/geotopia/7-01.jpg') no-repeat center/cover;"></div>
+      <!-- Page 2 -->
+      <div id="page2" class="page" style="background: url('https://daryeaye.github.io/geotopia/7-02.jpg') no-repeat center/cover;"></div>
+      <!-- Page 3 -->
+      <div id="page3" class="page" style="background: url('https://daryeaye.github.io/geotopia/7-03.jpg') no-repeat center/cover;"></div>
+      <!-- Page 4 -->
+      <div id="page4" class="page" style="background: url('https://daryeaye.github.io/geotopia/7-04.jpg') no-repeat center/cover;"></div>
+      <!-- Page 5: Typeable box (unlock key) -->
+      <div id="page5" class="page" style="background: url('https://daryeaye.github.io/geotopia/7-05.jpg') no-repeat center/cover;">
+         <input type="text" id="input5" style="position:absolute; left:346px; top:335px; width:268px; height:53px;" />
+      </div>
+      <!-- Page 6: Six invisible clickable boxes -->
+      <div id="page6" class="page" style="background: url('https://daryeaye.github.io/geotopia/7-06.jpg') no-repeat center/cover;">
+         <!-- Box A (goes to Page 7) -->
+         <div class="box" onclick="showPage(7)" style="left:10px; top:10px; width:301px; height:250px;"></div>
+         <!-- Box B (goes to Page 8) -->
+         <div class="box" onclick="showPage(8)" style="left:329px; top:10px; width:302px; height:250px;"></div>
+         <!-- Box C (goes to Page 9) -->
+         <div class="box" onclick="showPage(9)" style="left:649px; top:10px; width:301px; height:250px;"></div>
+         <!-- Box D (goes to Page 10) -->
+         <div class="box" onclick="showPage(10)" style="left:10px; top:279px; width:301px; height:250px;"></div>
+         <!-- Box E (goes to Page 11) -->
+         <div class="box" onclick="showPage(11)" style="left:329px; top:279px; width:302px; height:250px;"></div>
+         <!-- Box F (goes to Page 12) -->
+         <div class="box" onclick="showPage(12)" style="left:649px; top:279px; width:301px; height:250px;"></div>
+      </div>
+      <!-- Page 7 -->
+      <div id="page7" class="page" style="background: url('https://daryeaye.github.io/geotopia/7-07.jpg') no-repeat center/cover;">
+         <button class="local-back" onclick="showPage(6)">Back</button>
+         <input type="text" id="input7" style="position:absolute; left:151px; top:479px; width:269px; height:52px;" />
+         <button onclick="checkAnswer('input7', '56.52', function(){ window.open('https://daryeaye.github.io/geotopia/1CJ.pdf', '_blank'); })" 
+           style="position:absolute; left:430px; top:479px;">Submit</button>
+      </div>
+      <!-- Page 8 -->
+      <div id="page8" class="page" style="background: url('https://daryeaye.github.io/geotopia/7-08.jpg') no-repeat center/cover;">
+         <button class="local-back" onclick="showPage(6)">Back</button>
+         <input type="text" id="input8" style="position:absolute; left:151px; top:479px; width:269px; height:52px;" />
+         <button onclick="checkAnswer('input8', '12.56', function(){ window.open('https://daryeaye.github.io/geotopia/2MJ.pdf', '_blank'); })" 
+           style="position:absolute; left:430px; top:479px;">Submit</button>
+      </div>
+      <!-- Page 9 -->
+      <div id="page9" class="page" style="background: url('https://daryeaye.github.io/geotopia/7-09.jpg') no-repeat center/cover;">
+         <button class="local-back" onclick="showPage(6)">Back</button>
+         <input type="text" id="input9" style="position:absolute; left:151px; top:479px; width:269px; height:52px;" />
+         <button onclick="checkAnswer('input9', '184', function(){ window.open('https://daryeaye.github.io/geotopia/3ML.pdf', '_blank'); })" 
+           style="position:absolute; left:430px; top:479px;">Submit</button>
+      </div>
+      <!-- Page 10 -->
+      <div id="page10" class="page" style="background: url('https://daryeaye.github.io/geotopia/7-10.jpg') no-repeat center/cover;">
+         <button class="local-back" onclick="showPage(6)">Back</button>
+         <input type="text" id="input10" style="position:absolute; left:151px; top:479px; width:269px; height:52px;" />
+         <button onclick="checkAnswer('input10', '33', function(){ window.open('https://daryeaye.github.io/geotopia/4CM.pdf', '_blank'); })" 
+           style="position:absolute; left:430px; top:479px;">Submit</button>
+      </div>
+      <!-- Page 11 -->
+      <div id="page11" class="page" style="background: url('https://daryeaye.github.io/geotopia/7-11.jpg') no-repeat center/cover;">
+         <button class="local-back" onclick="showPage(6)">Back</button>
+         <input type="text" id="input11" style="position:absolute; left:151px; top:479px; width:269px; height:52px;" />
+         <button onclick="checkAnswer('input11', '11', function(){ window.open('https://daryeaye.github.io/geotopia/5A.pdf', '_blank'); })" 
+           style="position:absolute; left:430px; top:479px;">Submit</button>
+      </div>
+      <!-- Page 12 -->
+      <div id="page12" class="page" style="background: url('https://daryeaye.github.io/geotopia/7-12.jpg') no-repeat center/cover;">
+         <button class="local-back" onclick="showPage(6)">Back</button>
+         <input type="text" id="input12" style="position:absolute; left:151px; top:479px; width:269px; height:52px;" />
+         <button onclick="checkAnswer('input12', '19', function(){ window.open('https://daryeaye.github.io/geotopia/6TM.pdf', '_blank'); })" 
+           style="position:absolute; left:430px; top:479px;">Submit</button>
+      </div>
+    </div>
+    <!-- Global Navigation buttons -->
+    <div id="nav-buttons">
+      <button id="prev-btn" onclick="prevPage()">Previous</button>
+      <button id="next-btn" onclick="nextPage()">Next</button>
+    </div>
+  </div>
+  
+  <!-- Side Widget (Translation) -->
+  <div id="side-widget">
+    <p class="title">Need translation?</p>
+    <button id="select-text">Select Text</button>
+    <p>
+      <a href="https://translate.google.com/?sl=en&tl=es&op=images" target="_blank">
+        Click me and paste from clipboard
+      </a>
+    </p>
+  </div>
+  
+  <!-- Side Widget Script -->
+  <script>
+    document.getElementById('select-text').addEventListener('click', function() {
+      const overlay = document.createElement('div');
+      overlay.id = 'selection-overlay';
+      document.body.appendChild(overlay);
+      
+      let startX, startY, selectionBox;
+      
+      overlay.addEventListener('mousedown', function(e) {
+        startX = e.clientX;
+        startY = e.clientY;
+        
+        selectionBox = document.createElement('div');
+        selectionBox.id = 'selection-box';
+        selectionBox.style.left = startX + 'px';
+        selectionBox.style.top = startY + 'px';
+        selectionBox.style.width = '0px';
+        selectionBox.style.height = '0px';
+        overlay.appendChild(selectionBox);
+        
+        function mouseMoveHandler(e) {
+          const currentX = e.clientX;
+          const currentY = e.clientY;
+          const rectLeft = Math.min(startX, currentX);
+          const rectTop = Math.min(startY, currentY);
+          const rectWidth = Math.abs(currentX - startX);
+          const rectHeight = Math.abs(currentY - startY);
+          selectionBox.style.left = rectLeft + 'px';
+          selectionBox.style.top = rectTop + 'px';
+          selectionBox.style.width = rectWidth + 'px';
+          selectionBox.style.height = rectHeight + 'px';
+        }
+        
+        function mouseUpHandler(e) {
+          overlay.removeEventListener('mousemove', mouseMoveHandler);
+          overlay.removeEventListener('mouseup', mouseUpHandler);
+          
+          const boxRect = selectionBox.getBoundingClientRect();
+          document.body.removeChild(overlay);
+          
+          const target = document.getElementById('container');
+          const targetRect = target.getBoundingClientRect();
+          
+          html2canvas(target, { useCORS: true, allowTaint: false }).then(canvas => {
+            const scaleFactor = canvas.width / targetRect.width;
+            const sx = (boxRect.left - targetRect.left) * scaleFactor;
+            const sy = (boxRect.top - targetRect.top) * scaleFactor;
+            const sWidth = boxRect.width * scaleFactor;
+            const sHeight = boxRect.height * scaleFactor;
+            
+            const croppedCanvas = document.createElement('canvas');
+            croppedCanvas.width = sWidth;
+            croppedCanvas.height = sHeight;
+            const ctx = croppedCanvas.getContext('2d');
+            ctx.drawImage(canvas, sx, sy, sWidth, sHeight, 0, 0, sWidth, sHeight);
+            
+            croppedCanvas.toBlob(blob => {
+              if (blob) {
+                const item = new ClipboardItem({ 'image/png': blob });
+                navigator.clipboard.write([item]).then(() => {
+                  alert('Screenshot copied to clipboard.');
+                }).catch(err => {
+                  console.error('Failed to copy screenshot to clipboard', err);
+                  alert('Failed to copy screenshot to clipboard.');
+                });
+              }
+            });
+          });
+        }
+        
+        overlay.addEventListener('mousemove', mouseMoveHandler);
+        overlay.addEventListener('mouseup', mouseUpHandler);
+      });
+    });
+  </script>
+  
+  <!-- Main Code Script -->
+  <script>
+    let currentPage = 1;
+    const totalPages = 12;
+    
+    function showPage(pageNum) {
+      // Hide all pages
+      for (let i = 1; i <= totalPages; i++) {
+        document.getElementById('page' + i).classList.remove('active');
+      }
+      // Show the target page
+      document.getElementById('page' + pageNum).classList.add('active');
+      
+      // Global Navigation button visibility:
+      // Hide the next/previous buttons on pages 7 to 12.
+      if (pageNum >= 7 && pageNum <= 12) {
+        document.getElementById("prev-btn").style.display = "none";
+        document.getElementById("next-btn").style.display = "none";
+      } else if (pageNum === 1) {
+        document.getElementById("prev-btn").style.display = "none";
+        document.getElementById("next-btn").style.display = "inline-block";
+      } else if (pageNum === 6) {
+        // On page 6, only show Previous button
+        document.getElementById("prev-btn").style.display = "inline-block";
+        document.getElementById("next-btn").style.display = "none";
+      } else if (pageNum === 5) {
+        // For page 5, show both so that Next functions as unlock
+        document.getElementById("prev-btn").style.display = "inline-block";
+        document.getElementById("next-btn").style.display = "inline-block";
+      } else {
+        document.getElementById("prev-btn").style.display = "inline-block";
+        document.getElementById("next-btn").style.display = "inline-block";
+      }
+      currentPage = pageNum;
+    }
+    
+    function nextPage() {
+      // For page 5, next button works as an unlock button
+      if (currentPage === 5) {
+        const userInput = document.getElementById('input5').value.trim();
+        if(userInput === '3121322'){
+          showPage(6);
+        } else {
+          alert("💀Incorrect Key💀");
+        }
+      } else {
+        if (currentPage < totalPages) {
+          showPage(currentPage + 1);
+        }
+      }
+    }
+    
+    function prevPage() {
+      if (currentPage > 1) {
+        showPage(currentPage - 1);
+      }
+    }
+    
+    function checkAnswer(inputId, expected, successAction) {
+      const userInput = document.getElementById(inputId).value.trim();
+      if(userInput === expected) {
+        successAction();
+      } else {
+        alert("💀Incorrect Key💀");
+      }
+    }
+    
+    document.addEventListener("DOMContentLoaded", function() {
+      showPage(currentPage);
+    });
+  </script>
+</body>
+</html>
