@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -88,13 +89,51 @@
       box-sizing: border-box;
       font-family: 'Caveat', cursive;
       z-index: 999;
+      transition: all 0.25s ease;
+    }
+    #side-widget.collapsed {
+      width: 120px;
+      height: 24px;
+      padding: 0;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      background: rgba(249,249,249,0.95);
+      border: 1px solid #ccc;
+      font-family: "Comic Sans MS", sans-serif;
+      font-size: 8px;
+      line-height: 1;
+      white-space: nowrap;
+    }
+    #side-widget.collapsed * {
+      display: none !important;
+    }
+    #side-widget.collapsed::after {
+      content: "Translation";
+    }
+    #collapse-widget {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      width: 22px;
+      height: 22px;
+      padding: 0;
+      line-height: 1;
+      font-size: 14px;
+      background: lightblue;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-family: "Comic Sans MS", sans-serif;
     }
     #side-widget p.title {
       font-size: 24px;
       text-align: center;
       margin: 0 0 10px;
     }
-    #side-widget button,
+    #side-widget button:not(#collapse-widget),
     #side-widget a {
       display: block;
       margin: 0 auto;
@@ -128,6 +167,15 @@
       cursor: pointer;
       background: transparent;
       border: none;
+    }
+    #pageTransitionOverlay{
+      position: absolute;
+      inset: 0;
+      background: #000;
+      z-index: 10050;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.28s ease;
     }
   </style>
   
@@ -207,6 +255,7 @@
          <button onclick="checkAnswer('input12', '19', function(){ window.open('https://daryeaye.github.io/geotopia/6TM.pdf', '_blank'); })" 
            style="position:absolute; left:430px; top:479px;">Submit</button>
       </div>
+      <div id="pageTransitionOverlay"></div>
     </div>
     <!-- Global Navigation buttons -->
     <div id="nav-buttons">
@@ -216,7 +265,8 @@
   </div>
   
   <!-- Side Widget (Translation) -->
-  <div id="side-widget">
+  <div id="side-widget" class="collapsed" aria-label="Translation widget">
+    <button id="collapse-widget" type="button" aria-label="Collapse translation widget">–</button>
     <p class="title">Need translation?</p>
     <button id="select-text">Select Text</button>
     <p>
@@ -228,6 +278,17 @@
   
   <!-- Side Widget Script -->
   <script>
+    document.getElementById('collapse-widget').addEventListener('click', function(e) {
+      e.stopPropagation();
+      document.getElementById('side-widget').classList.add('collapsed');
+    });
+
+    document.getElementById('side-widget').addEventListener('click', function() {
+      if (this.classList.contains('collapsed')) {
+        this.classList.remove('collapsed');
+      }
+    });
+
     document.getElementById('select-text').addEventListener('click', function() {
       const overlay = document.createElement('div');
       overlay.id = 'selection-overlay';
@@ -308,14 +369,38 @@
     let currentPage = 1;
     const totalPages = 12;
     
-    function showPage(pageNum) {
+    let isPageTransitioning = false;
+
+    function wait(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    async function runCanvasTransition(action) {
+      const overlay = document.getElementById("pageTransitionOverlay");
+      if (!overlay) {
+        action();
+        return;
+      }
+      isPageTransitioning = true;
+      overlay.style.pointerEvents = "auto";
+      overlay.style.opacity = "1";
+      await wait(280);
+      action();
+      await wait(60);
+      overlay.style.opacity = "0";
+      await wait(280);
+      overlay.style.pointerEvents = "none";
+      isPageTransitioning = false;
+    }
+
+    function displayPage(pageNum) {
       // Hide all pages
       for (let i = 1; i <= totalPages; i++) {
         document.getElementById('page' + i).classList.remove('active');
       }
       // Show the target page
       document.getElementById('page' + pageNum).classList.add('active');
-      
+
       // Global Navigation button visibility:
       // Hide the next/previous buttons on pages 7 to 12.
       if (pageNum >= 7 && pageNum <= 12) {
@@ -338,7 +423,20 @@
       }
       currentPage = pageNum;
     }
-    
+
+    async function showPage(pageNum) {
+      pageNum = Number(pageNum);
+      if (!document.getElementById('page' + pageNum)) return;
+      if (isPageTransitioning) return;
+      if (pageNum === currentPage) {
+        displayPage(pageNum);
+        return;
+      }
+      await runCanvasTransition(function() {
+        displayPage(pageNum);
+      });
+    }
+
     function nextPage() {
       // For page 5, next button works as an unlock button
       if (currentPage === 5) {
